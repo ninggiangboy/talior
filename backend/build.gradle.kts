@@ -4,6 +4,7 @@ plugins {
 	id("org.springframework.boot") version "3.5.3"
 	id("io.spring.dependency-management") version "1.1.7"
 	id("org.sonarqube") version "6.2.0.5505"
+	id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
 }
 
 
@@ -44,4 +45,13 @@ sonar {
     property("sonar.projectKey", "talior-backend")
     property("sonar.projectName", "talior-backend")
   }
+}
+
+ktlint {
+	version.set("1.0.1")
+	android.set(false)
+	verbose.set(true)
+	filter {
+		exclude { element -> element.file.path.contains("build/") }
+	}
 }

@@ -1,8 +1,8 @@
-import { type RouteObject } from "react-router";
+import { type RouteObject } from 'react-router';
 
 export const routes: RouteObject[] = [
   {
-    path: "/",
+    path: '/',
     element: <div>Hello World!</div>,
   },
 ];
