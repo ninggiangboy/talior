@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController
 class BackendApplication {
 	@GetMapping
 	fun index(): String {
-		return "Hello, World!"
+		return "Hello World!"
 	}
 }
 

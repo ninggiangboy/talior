@@ -138,7 +138,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-  build-backend:
+  build-and-deploy-backend:
     if: needs.detect-changes.outputs.backend_changed == 'true'
     runs-on: self-hosted
     needs: [unit-test, sonarqube-backend]
@@ -164,7 +164,18 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  build-frontend:
+      - name: Trigger Dokploy Deployment
+        run: |
+          curl -X 'POST' \
+          'https://${{ secrets.DOKPLOY_DOMAIN }}/api/compose.deploy' \
+          -H 'accept: application/json' \
+          -H 'x-api-key: ${{ secrets.DOKPLOY_API_KEY }}' \
+          -H 'Content-Type: application/json' \
+          -d '{
+              "composeId": "${{ secrets.DOKPLOY_BACKEND_APPLICATION_ID }}"
+          }'
+
+  build-and-deploy-frontend:
     if: needs.detect-changes.outputs.frontend_changed == 'true'
     runs-on: self-hosted
     needs: [sonarqube-frontend, lint-frontend]
@@ -189,3 +200,14 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/talior-frontend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Trigger Dokploy Deployment
+        run: |
+          curl -X 'POST' \
+          'https://${{ secrets.DOKPLOY_DOMAIN }}/api/compose.deploy' \
+          -H 'accept: application/json' \
+          -H 'x-api-key: ${{ secrets.DOKPLOY_API_KEY }}' \
+          -H 'Content-Type: application/json' \
+          -d '{
+              "composeId": "${{ secrets.DOKPLOY_FRONTEND_APPLICATION_ID }}"
+          }'
