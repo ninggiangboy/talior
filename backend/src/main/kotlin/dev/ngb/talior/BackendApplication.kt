@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/")
 class BackendApplication {
-	@GetMapping
-	fun index(): String {
-		return "Hello World!"
-	}
+    @GetMapping
+    fun index(): String {
+        return "Hello World!"
+    }
 }
 
 fun main(args: Array<String>) {
-	runApplication<BackendApplication>(*args)
+    runApplication<BackendApplication>(*args)
 }
-
